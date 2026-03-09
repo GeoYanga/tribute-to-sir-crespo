@@ -22,7 +22,7 @@ body{
   top: 20px;
   left: 20px;
   display: flex;
-  gap: 8px;
+  gap: 12px;
   z-index: 1003; 
   align-items: center;
   transition: opacity 0.6s ease; 
@@ -32,11 +32,12 @@ body{
   pointer-events: none;
 }
 .top-logos img {
-  height: 100px; 
+  height: 120px; /* bigger logos */
   width: auto;
   object-fit: contain;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  transition:0.3s;
 }
 
 /* LOADING */
@@ -77,34 +78,36 @@ button:hover{
   transform:scale(1.07);
 }
 
+/* TRIBUTE BUTTON */
 #musicBtn{
   position:fixed;
   top:50%;
   left:50%;
   transform:translate(-50%, -50%);
   z-index:1005;
-
   padding:14px 28px;
   font-size:18px;
   border-radius:40px;
-
   background:linear-gradient(45deg,#10b981,#34d399);
   color:white;
   border:none;
   cursor:pointer;
   box-shadow:0 10px 30px rgba(0,0,0,0.4);
 }
-@media(max-width:768px){
-
-  #musicBtn{
-    font-size:14px;
-    padding:10px 20px;
-  }
-
-}
-
 #musicBtn:hover{
   transform: translate(-50%, -50%) scale(1.08);
+}
+
+/* CREDIT */
+#credit{
+  position:fixed;
+  top:65%;
+  left:50%;
+  transform:translate(-50%, -50%);
+  font-size:16px;
+  opacity:0.7;
+  font-style:italic;
+  text-align:center;
 }
 
 /* TOP MESSAGES BUTTON */
@@ -177,25 +180,14 @@ button:hover{
   padding:20px;
   font-size:22px;
 }
-@media(max-width:768px){
-
-  .hero-text{
-    font-size:16px;
-    padding:15px;
-  }
-
-  .hero-text p{
-    line-height:1.4;
-  }
-
-}
 
 /* GALLERY */
 .gallery{
   display:flex;
   gap:25px;
-  overflow:hidden;
+  overflow-x:auto; /* horizontal scroll on small screens */
   align-items:center;
+  scroll-behavior: smooth;
 }
 .photo{
   flex:0 0 auto;
@@ -283,6 +275,50 @@ button:hover{
 
 /* RESPONSIVE */
 @media(max-width:800px){
+  /* logos */
+  .top-logos img{
+    height:70px;
+  }
+  /* hero slideshow */
+  .hero-slideshow{
+    height:280px;
+  }
+  .hero-text{
+    font-size:16px;
+    padding:15px;
+  }
+  /* message */
+  .message{
+    font-size:16px;
+    padding:15px;
+    max-height:250px;
+  }
+  /* music button */
+  #musicBtn{
+    top:40%;
+    font-size:16px;
+    padding:12px 22px;
+  }
+  /* gallery */
+  .gallery{
+    gap:15px;
+  }
+  .photo img{
+    max-height:150px;
+  }
+  /* title */
+  .title{
+    font-size:28px;
+    margin-top:80px;
+  }
+  /* credit */
+  #credit{
+    top:70%;
+    font-size:14px;
+    padding:0 10px;
+    text-align:center;
+  }
+  /* messages page */
   #messagesContainer{
     flex-direction:column;
     height:auto;
@@ -291,37 +327,6 @@ button:hover{
     width:100%;
     height:auto;
   }
-
-  .top-logos img{
-    height:50px;
-  }
-  .title{
-    font-size:28px;
-    margin-top:80px;
-  }
-  .message{
-    font-size:16px;
-    padding:15px;
-  }
-  .hero-slideshow{
-    height:300px;
-  }
-  #musicBtn{
-    top:100px;
-    right:10px;
-    font-size:14px;
-    padding:8px 16px;
-  }
-}
-#credit{
-  position:fixed;
-  top:60%;
-  left:50%;
-  transform:translate(-50%, -50%);
-  text-align:center;
-  font-size:15px;
-  opacity:0.6;
-  font-style:italic;
 }
 </style>
 </head>
@@ -345,6 +350,7 @@ button:hover{
 <!-- MUSIC BUTTON -->
 <button id="musicBtn" style="display:none;">▶ Tribute for President</button>
 
+<!-- CREDIT -->
 <div id="credit">
 Built & Deployed by CCIS Student Council | Dedicated to Dr. Pablo S. Crespo Jr.
 </div>
@@ -402,17 +408,22 @@ Built & Deployed by CCIS Student Council | Dedicated to Dr. Pablo S. Crespo Jr.
 // LOADING SCREEN
 setTimeout(() => {
   document.getElementById("loading").style.display = "none";
-  document.getElementById("musicBtn").style.display = "block"; // show music button
+  document.getElementById("musicBtn").style.display = "block";
 }, 2500);
 
 // MUSIC BUTTON
 const musicBtn = document.getElementById("musicBtn");
 const bgMusic = document.getElementById("bgMusic");
+const topLogos = document.querySelector('.top-logos');
+const credit = document.getElementById("credit");
+
 musicBtn.addEventListener("click", ()=>{
   bgMusic.currentTime = 25;
   bgMusic.play();
-  musicBtn.style.display="none"; // hide after clicked
+  musicBtn.style.display="none"; 
   document.getElementById("app").style.display="flex";
+  topLogos.classList.add('fade'); // hide logos
+  credit.style.display = "none";   // hide credit
 });
 
 // START TRIBUTE APP
@@ -505,7 +516,6 @@ const backBtn=document.getElementById("backBtn");
 const messagesList=document.getElementById("messagesList");
 const msgTitle=document.getElementById("msgTitle");
 const msgBody=document.getElementById("msgBody");
-const topLogos = document.querySelector('.top-logos');
 
 const messages=[
   {
@@ -528,7 +538,9 @@ Representing the Voice of the CCIS Student Body`,
   },
   {
     title:"Honoring President Crespo",
-    body:`True leadership is not measured by the years in office, but by the lives touched and the foundations built. Today, we honor a man whose vision has been the cornerstone of our institution's progress.
+    body:`To our esteemed President, Dr. Pablo S. Crespo Jr.,
+
+True leadership is not measured by the years in office, but by the lives touched and the foundations built. Today, we honor a man whose vision has been the cornerstone of our institution's progress.
 
 Dr. Crespo, your tenure has been defined by a rare blend of academic excellence and genuine compassion. You didn’t just lead an institution; you nurtured a community.
 
@@ -544,12 +556,13 @@ Your Heart: For always being a 'President of the People,' listening to the conce
 As you move into this well-deserved retirement, know that your legacy is etched into the very spirit of this school. You leave behind a trail of excellence that will inspire us for generations to come.
 
 Thank you, Sir. Crespo, for a job magnificently done. May your next chapter be as fulfilling and impactful as the one you conclude today.`,
-
     unread:true
   },
   {
     title:"A bambUhAy Tribute (Poem)",
-    body:`(A Poem for Dr. Pablo S. Crespo Jr.) The bells of UA ring clear through the air,
+    body:`(A Poem for Dr. Pablo S. Crespo Jr.)
+
+The bells of UA ring clear through the air,
 For a leader who guided with wisdom and care.
 In Yellow and Red, our banners now fly,
 To honor the man who taught us to try.
@@ -616,6 +629,5 @@ backBtn.addEventListener("click", ()=>{
   topLogos.classList.remove('fade');
 });
 </script>
-
 </body>
 </html>
