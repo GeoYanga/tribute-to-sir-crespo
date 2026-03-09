@@ -283,9 +283,13 @@ button:hover{
   .hero-slideshow{
     height:280px;
   }
-  .hero-text{
-    font-size:16px;
-    padding:15px;
+  /* HERO TEXT RESPONSIVE */
+.hero-text p {
+  font-size: 14px; /* smaller for phones */
+  line-height: 1.4; /* reduce line height to fit */
+  padding: 10px;    /* add some padding */
+  word-wrap: break-word; /* ensure text wraps inside the container */
+}
   }
   /* message */
   .message{
@@ -621,12 +625,13 @@ messagesBtn.addEventListener("click", ()=>{
   });
 });
 
-// BACK TO TRIBUTE PAGE
+/// BACK TO TRIBUTE PAGE
 backBtn.addEventListener("click", ()=>{
   messagesPage.style.display="none";
   document.getElementById("app").style.display="flex";
   messagesBtn.style.display = "block"; 
-  topLogos.classList.remove('fade');
+  // logos will stay hidden, do NOT remove 'fade' class
+  // topLogos.classList.remove('fade'); <-- removed
 });
 </script>
 </body>
