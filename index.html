@@ -77,25 +77,30 @@ button:hover{
   transform:scale(1.07);
 }
 
-/* MUSIC BUTTON */
 #musicBtn{
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 1005;
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform:translate(-50%, -50%);
+  z-index:1005;
 
-  padding: 16px 35px;
-  font-size: 18px;
-  border-radius: 40px;
+  padding:14px 28px;
+  font-size:18px;
+  border-radius:40px;
 
-  background: linear-gradient(45deg,#10b981,#34d399);
-  color: white;
-  border: none;
-  cursor: pointer;
+  background:linear-gradient(45deg,#10b981,#34d399);
+  color:white;
+  border:none;
+  cursor:pointer;
+  box-shadow:0 10px 30px rgba(0,0,0,0.4);
+}
+@media(max-width:768px){
 
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-  transition: 0.3s;
+  #musicBtn{
+    font-size:14px;
+    padding:10px 20px;
+  }
+
 }
 
 #musicBtn:hover{
@@ -169,8 +174,20 @@ button:hover{
   left:0;
   width:100%;
   background:linear-gradient(transparent,rgba(0,0,0,0.8));
-  padding:30px;
-  font-size:24px;
+  padding:20px;
+  font-size:22px;
+}
+@media(max-width:768px){
+
+  .hero-text{
+    font-size:16px;
+    padding:15px;
+  }
+
+  .hero-text p{
+    line-height:1.4;
+  }
+
 }
 
 /* GALLERY */
