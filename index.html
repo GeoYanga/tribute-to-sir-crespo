@@ -32,12 +32,31 @@ body{
   pointer-events: none;
 }
 .top-logos img {
-  height: 100px; 
-  width: auto;
-  object-fit: contain;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+height: 70px;
+width: auto;
+object-fit: contain;
+border-radius: 8px;
+box-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
+@media (max-width: 600px){
+
+.top-logos{
+top:10px;
+left:10px;
+gap:5px;
+}
+
+.top-logos img{
+height:45px;
+}
+
+.title{
+margin-top:70px;
+font-size:34px;
+}
+
+}
+
 
 /* LOADING */
 #loading{
