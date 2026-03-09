@@ -19,44 +19,25 @@ body{
 /* TOP LEFT LOGOS */
 .top-logos {
   position: fixed;
-  top: 5px;
+  top: 20px;
   left: 20px;
   display: flex;
   gap: 8px;
   z-index: 1003; 
   align-items: center;
-  transition: opacity 0.6s ease;
+  transition: opacity 0.6s ease; 
 }
 .top-logos.fade {
   opacity: 0;
   pointer-events: none;
 }
 .top-logos img {
-height: 70px;
-width: auto;
-object-fit: contain;
-border-radius: 8px;
-box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  height: 100px; 
+  width: auto;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
-@media (max-width: 600px){
-
-.top-logos{
-top:10px;
-left:10px;
-gap:5px;
-}
-
-.top-logos img{
-height:45px;
-}
-
-.title{
-margin-top:70px;
-font-size:34px;
-}
-
-}
-
 
 /* LOADING */
 #loading{
@@ -69,32 +50,16 @@ font-size:34px;
   justify-content:center;
   align-items:center;
   z-index:9999;
+  color:white;
 }
 .loader{
   font-size:70px;
   animation:pulse 1.2s infinite;
-  margin-bottom: 20px;
+  margin-bottom:20px;
 }
 @keyframes pulse{
   0%,100%{transform:scale(1);}
   50%{transform:scale(1.25);}
-}
-
-/* LOADING BUTTON */
-#startBtn{
-  padding:15px 30px;
-  border:none;
-  border-radius:50px;
-  background:linear-gradient(45deg,#3b82f6,#60a5fa);
-  color:white;
-  font-size:20px;
-  font-weight:600;
-  cursor:pointer;
-  transition:0.3s;
-  display:none; /* initially hidden */
-}
-#startBtn:hover{
-  transform:scale(1.1);
 }
 
 /* BUTTONS */
@@ -110,6 +75,31 @@ button{
 }
 button:hover{
   transform:scale(1.07);
+}
+
+/* MUSIC BUTTON */
+#musicBtn{
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1005;
+
+  padding: 16px 35px;
+  font-size: 18px;
+  border-radius: 40px;
+
+  background: linear-gradient(45deg,#10b981,#34d399);
+  color: white;
+  border: none;
+  cursor: pointer;
+
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  transition: 0.3s;
+}
+
+#musicBtn:hover{
+  transform: translate(-50%, -50%) scale(1.08);
 }
 
 /* TOP MESSAGES BUTTON */
@@ -284,6 +274,27 @@ button:hover{
     width:100%;
     height:auto;
   }
+
+  .top-logos img{
+    height:50px;
+  }
+  .title{
+    font-size:28px;
+    margin-top:80px;
+  }
+  .message{
+    font-size:16px;
+    padding:15px;
+  }
+  .hero-slideshow{
+    height:300px;
+  }
+  #musicBtn{
+    top:100px;
+    right:10px;
+    font-size:14px;
+    padding:8px 16px;
+  }
 }
 </style>
 </head>
@@ -301,10 +312,13 @@ button:hover{
 <!-- LOADING -->
 <div id="loading">
   <div class="loader">⭐</div>
-  <button id="startBtn">Tribute to President</button>
+  <p>Please wait...</p>
 </div>
 
-<!-- MAIN TRIBUTE APP -->
+<!-- MUSIC BUTTON -->
+<button id="musicBtn" style="display:none;">▶ Tribute for President</button>
+
+<!-- MAIN APP -->
 <div id="app">
   <div class="container">
     <div class="title">Honoring President Sir Crespo</div>
@@ -354,44 +368,23 @@ button:hover{
 </div>
 
 <script>
-const bgMusic = document.getElementById('bgMusic');
-const startBtn = document.getElementById('startBtn');
-const app = document.getElementById('app');
-const messagesBtn = document.getElementById("messagesBtn");
-const messagesPage = document.getElementById("messagesPage");
-const backBtn = document.getElementById("backBtn");
-const messagesList = document.getElementById("messagesList");
-const msgTitle = document.getElementById("msgTitle");
-const msgBody = document.getElementById("msgBody");
-const topLogos = document.querySelector('.top-logos');
-
-// Show start button after loading 3s
+// LOADING SCREEN
 setTimeout(() => {
-  startBtn.style.display = "block";
-}, 3000);
-
-// HERO SLIDESHOW MESSAGES
-const heroMessages = [
-  "President Crespo led the institution with vision and dedication.",
-  "His leadership inspired students and faculty alike.",
-  "Through challenges and progress, he guided the community forward.",
-  "His legacy will remain part of the institution's history.",
-  "He fostered innovation and excellence in every department.",
-  "His guidance empowered teachers to achieve more.",
-  "He promoted student engagement and community service.",
-  "His decisions strengthened the institution's foundation.",
-  "He embraced challenges as opportunities for growth.",
-  "His contributions will be remembered by generations to come."
-];
-
-startBtn.addEventListener("click", () => {
-  bgMusic.currentTime = 25;
-  bgMusic.play().catch(err => console.log(err));
   document.getElementById("loading").style.display = "none";
-  app.style.display = "flex";
-  startApp();
+  document.getElementById("musicBtn").style.display = "block"; // show music button
+}, 2500);
+
+// MUSIC BUTTON
+const musicBtn = document.getElementById("musicBtn");
+const bgMusic = document.getElementById("bgMusic");
+musicBtn.addEventListener("click", ()=>{
+  bgMusic.currentTime = 25;
+  bgMusic.play();
+  musicBtn.style.display="none"; // hide after clicked
+  document.getElementById("app").style.display="flex";
 });
 
+// START TRIBUTE APP
 function startApp(){
   const letter=document.getElementById("letterText");
   const text=letter.innerText;
@@ -399,14 +392,42 @@ function startApp(){
   let i=0;
   function typeLetter(){
     if(i<text.length){
-      letter.innerHTML+=text.charAt(i)==="\n"?"<br>":text.charAt(i);
+      letter.innerHTML+=text.charAt(i)==="\n"? "<br>": text.charAt(i);
       i++;
       setTimeout(typeLetter,25);
     }
   }
   typeLetter();
 
+  // GALLERY
+  const gallery=document.getElementById("gallery");
+  const totalPhotos=20;
+  for(let i=1;i<=totalPhotos;i++){
+    const div=document.createElement("div");
+    div.className="photo";
+    div.innerHTML=`<img src="images/photo${i}.jpg" loading="lazy">`;
+    gallery.appendChild(div);
+  }
+  gallery.innerHTML+=gallery.innerHTML;
+
   // HERO SLIDESHOW
+  const heroImages=[
+    "images/crespo1.jpg","images/crespo2.jpg","images/crespo3.jpg",
+    "images/crespo4.jpg","images/crespo5.jpg","images/crespo6.jpg",
+    "images/crespo7.jpg","images/crespo8.jpg","images/crespo9.jpg","images/crespo10.jpg"
+  ];
+  const heroMessages=[
+    "President Crespo led the institution with vision and dedication.",
+    "His leadership inspired students and faculty alike.",
+    "Through challenges and progress, he guided the community forward.",
+    "His legacy will remain part of the institution's history.",
+    "He fostered innovation and excellence in every department.",
+    "His guidance empowered teachers to achieve more.",
+    "He promoted student engagement and community service.",
+    "His decisions strengthened the institution's foundation.",
+    "He embraced challenges as opportunities for growth.",
+    "His contributions will be remembered by generations to come."
+  ];
   const heroImg=document.getElementById("heroImage");
   const heroMsg=document.getElementById("heroMessage");
   let slideIndex=0;
@@ -425,25 +446,14 @@ function startApp(){
   function changeSlide(){
     heroImg.style.opacity=0;
     setTimeout(()=>{
-      slideIndex=(slideIndex+1)%heroMessages.length;
-      heroImg.src = `images/crespo${(slideIndex % 10)+1}.jpg`; // loop images
+      slideIndex=(slideIndex+1)%heroImages.length;
+      heroImg.src=heroImages[slideIndex];
       typeHeroMessage(heroMessages[slideIndex]);
       heroImg.style.opacity=1;
     },600);
   }
   typeHeroMessage(heroMessages[0]);
   setInterval(changeSlide,5000);
-
-  // AUTO SCROLL GALLERY
-  const gallery=document.getElementById("gallery");
-  const totalPhotos=20;
-  for(let i=1;i<=totalPhotos;i++){
-    const div=document.createElement("div");
-    div.className="photo";
-    div.innerHTML=`<img src="images/photo${i}.jpg" loading="lazy">`;
-    gallery.appendChild(div);
-  }
-  gallery.innerHTML+=gallery.innerHTML;
 
   let scrollPos=0;
   function autoScroll(){
@@ -455,7 +465,17 @@ function startApp(){
   autoScroll();
 }
 
-// MESSAGES
+document.getElementById("musicBtn").addEventListener("click", startApp);
+
+// MESSAGES LOGIC
+const messagesBtn=document.getElementById("messagesBtn");
+const messagesPage=document.getElementById("messagesPage");
+const backBtn=document.getElementById("backBtn");
+const messagesList=document.getElementById("messagesList");
+const msgTitle=document.getElementById("msgTitle");
+const msgBody=document.getElementById("msgBody");
+const topLogos = document.querySelector('.top-logos');
+
 const messages=[
   {
     title:"A Final System Salute to Our Architect of Innovation",
@@ -477,7 +497,7 @@ Representing the Voice of the CCIS Student Body`,
   },
   {
     title:"Honoring President Crespo",
-    body:`To our esteemed President, Dr. Pablo S. Crespo Jr, True leadership is not measured by the years in office, but by the lives touched and the foundations built. Today, we honor a man whose vision has been the cornerstone of our institution's progress.
+    body:`True leadership is not measured by the years in office, but by the lives touched and the foundations built. Today, we honor a man whose vision has been the cornerstone of our institution's progress.
 
 Dr. Crespo, your tenure has been defined by a rare blend of academic excellence and genuine compassion. You didn’t just lead an institution; you nurtured a community.
 
@@ -493,6 +513,7 @@ Your Heart: For always being a 'President of the People,' listening to the conce
 As you move into this well-deserved retirement, know that your legacy is etched into the very spirit of this school. You leave behind a trail of excellence that will inspire us for generations to come.
 
 Thank you, Sir. Crespo, for a job magnificently done. May your next chapter be as fulfilling and impactful as the one you conclude today.`,
+
     unread:true
   },
   {
@@ -519,19 +540,19 @@ Though your term ends and the seasons may sway,
 You’ll always be UA, the kasUbAy way!
 From the mountains to the sea, we raise up a cry:
 "bambUhAy, Dr. Crespo! UA Strong! UA High!"`,
+
     unread:true
   },
 ];
 
 // OPEN MESSAGES PAGE
 messagesBtn.addEventListener("click", ()=>{
-  app.style.display="none";
+  document.getElementById("app").style.display="none";
   messagesPage.style.display="flex";
   messagesBtn.style.display = "none"; 
-  topLogos.classList.add('fade');
-
+  topLogos.classList.add('fade'); 
   messagesList.innerHTML="";
-  messages.forEach(msg=>{
+  messages.forEach((msg)=>{
     const btn=document.createElement("button");
     const dot = document.createElement("span");
     dot.style.display = msg.unread ? "inline-block" : "none";
@@ -559,10 +580,11 @@ messagesBtn.addEventListener("click", ()=>{
 // BACK TO TRIBUTE PAGE
 backBtn.addEventListener("click", ()=>{
   messagesPage.style.display="none";
-  app.style.display="flex";
+  document.getElementById("app").style.display="flex";
   messagesBtn.style.display = "block"; 
   topLogos.classList.remove('fade');
 });
 </script>
+
 </body>
 </html>
