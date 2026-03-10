@@ -331,7 +331,7 @@ button:hover{
     width:100%;
     height:auto;
   }
-}
+
 </style>
 </head>
 <body>
@@ -390,8 +390,9 @@ Built & Deployed by CCIS Student Council | Dedicated to Dr. Pablo S. Crespo Jr.
   </div>
 </div>
 
+
 <!-- MESSAGES BUTTON -->
-<button id="messagesBtn">📩 Messages</button>
+<button id="messagesBtn" style="display:none;">📩 Messages</button>
 
 <!-- MESSAGES PAGE -->
 <div id="messagesPage">
@@ -425,9 +426,13 @@ musicBtn.addEventListener("click", ()=>{
   bgMusic.currentTime = 25;
   bgMusic.play();
   musicBtn.style.display="none"; 
-  document.getElementById("app").style.display="flex";
+  document.getElementById("app").style.display="flex"; // show tribute
   topLogos.classList.add('fade'); // hide logos
   credit.style.display = "none";   // hide credit
+  document.querySelector(".hero-text").style.display = "block"; // show hero text
+
+  // show messages button now
+  messagesBtn.style.display = "block";
 });
 
 // START TRIBUTE APP
