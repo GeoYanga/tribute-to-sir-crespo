@@ -32,7 +32,7 @@ body{
   pointer-events: none;
 }
 .top-logos img {
-  height: 120px; /* bigger logos */
+  height: 120px;
   width: auto;
   object-fit: contain;
   border-radius: 8px;
@@ -100,7 +100,7 @@ button:hover{
 
 #credit{
   position:fixed;
-  top:45%; /* above the button */
+  top:45%;
   left:50%;
   transform:translate(-50%, -50%);
   font-size:16px;
@@ -185,9 +185,8 @@ button:hover{
 .gallery{
   display:flex;
   gap:25px;
-  overflow-x:auto; /* horizontal scroll on small screens */
+  overflow-x:hidden; /* auto-scroll will handle */
   align-items:center;
-  scroll-behavior: smooth;
 }
 .photo{
   flex:0 0 auto;
@@ -275,77 +274,18 @@ button:hover{
 
 /* RESPONSIVE */
 @media(max-width:800px){
-  /* logos */
-  .top-logos img{
-    height:70px;
-  }
-  /* hero slideshow */
-  .hero-slideshow{
-    height:280px;
-  }
-  /* HERO TEXT RESPONSIVE */
-.hero-text p {
-  font-size: 14px; /* smaller for phones */
-  line-height: 1.4; /* reduce line height to fit */
-  padding: 10px;    /* add some padding */
-  word-wrap: break-word; /* ensure text wraps inside the container */
+  .top-logos img{ height:70px; }
+  .hero-slideshow{ height:280px; }
+  .hero-text p { font-size: 14px; line-height: 1.4; padding:10px; word-wrap: break-word; }
+  .message{ font-size:16px; padding:15px; max-height:250px; }
+  #musicBtn{ top:40%; font-size:16px; padding:12px 22px; }
+  .gallery{ gap:15px; }
+  .photo img{ max-height:150px; }
+  .title{ font-size:28px; margin-top:80px; }
+  #credit{ top:30%; font-size:14px; padding:0 10px; }
+  #messagesContainer{ flex-direction:column; height:auto; }
+  #messagesList,#messageContent{ width:100%; height:auto; }
 }
-  }
-  /* message */
-  .message{
-    font-size:16px;
-    padding:15px;
-    max-height:250px;
-  }
-  /* music button */
-  #musicBtn{
-    top:40%;
-    font-size:16px;
-    padding:12px 22px;
-  }
-  /* gallery */
-  .gallery{
-    gap:15px;
-  }
-  .photo img{
-    max-height:150px;
-  }
-  /* title */
-  .title{
-    font-size:28px;
-    margin-top:80px;
-  }
-  #credit {
-  position: fixed;
-  top: 30%; /* desktop */
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 16px;
-  opacity: 1;
-  font-style: italic;
-  text-align: center;
-  color: white;
-  z-index: 1006;
-}
-
-@media(max-width:800px){
-  #credit {
-    top: 30%; /* move up on smaller screens */
-    font-size: 14px; /* smaller text on mobile */
-    padding: 0 10px;
-  }
-}
-
-  /* messages page */
-  #messagesContainer{
-    flex-direction:column;
-    height:auto;
-  }
-  #messagesList, #messageContent{
-    width:100%;
-    height:auto;
-  }
-
 </style>
 </head>
 <body>
@@ -373,12 +313,14 @@ Built & Deployed by CCIS Student Council | Dedicated to Dr. Pablo S. Crespo Jr.
 <!-- MUSIC BUTTON -->
 <button id="musicBtn" style="display:none;">▶ Tribute for President</button>
 
+<!-- MESSAGES BUTTON -->
+<button id="messagesBtn" style="display:none;">📩 Messages</button>
+
 <!-- MAIN APP -->
 <div id="app">
   <div class="container">
     <div class="title">Honoring Dr. Pablo S. Crespo Jr.</div>
 
-    <!-- HERO SLIDESHOW -->
     <div class="hero-slideshow">
       <img id="heroImage" src="images/crespo1.jpg">
       <div class="hero-text">
@@ -386,7 +328,6 @@ Built & Deployed by CCIS Student Council | Dedicated to Dr. Pablo S. Crespo Jr.
       </div>
     </div>
 
-    <!-- TRIBUTE MESSAGE -->
     <div class="section message" id="letterText">
       Today we celebrate the leadership and dedication of President Sir Crespo.
       Through his vision and commitment, he guided this institution toward excellence and progress.
@@ -396,17 +337,12 @@ Built & Deployed by CCIS Student Council | Dedicated to Dr. Pablo S. Crespo Jr.
       Thank you for everything, President Crespo.
     </div>
 
-    <!-- GALLERY -->
     <div class="section">
       <h3>Memories During His Leadership</h3>
       <div class="gallery" id="gallery"></div>
     </div>
   </div>
 </div>
-
-
-<!-- MESSAGES BUTTON -->
-<button id="messagesBtn" style="display:none;">📩 Messages</button>
 
 <!-- MESSAGES PAGE -->
 <div id="messagesPage">
@@ -430,52 +366,36 @@ setTimeout(() => {
   document.getElementById("musicBtn").style.display = "block";
 }, 2500);
 
-// MUSIC BUTTON
 const musicBtn = document.getElementById("musicBtn");
 const bgMusic = document.getElementById("bgMusic");
 const topLogos = document.querySelector('.top-logos');
 const credit = document.getElementById("credit");
+const messagesBtn = document.getElementById("messagesBtn");
+const app = document.getElementById("app");
 
+// TRIBUTE BUTTON
 musicBtn.addEventListener("click", ()=>{
-  bgMusic.currentTime = 25;
+  bgMusic.currentTime=25;
   bgMusic.play();
-  musicBtn.style.display="none"; 
-  document.getElementById("app").style.display="flex"; // show tribute
-  topLogos.classList.add('fade'); // hide logos
-  credit.style.display = "none";   // hide credit
-  document.querySelector(".hero-text").style.display = "block"; // show hero text
-
-  // show messages button now
-  messagesBtn.style.display = "block";
+  app.style.display="flex";
+  topLogos.classList.add('fade');
+  credit.style.display="none";
+  musicBtn.style.display="none";
+  messagesBtn.style.display="block";
+  startApp();
 });
 
-// START TRIBUTE APP
+// TRIBUTE LOGIC
 function startApp(){
+  // typing message
   const letter=document.getElementById("letterText");
   const text=letter.innerText;
   letter.innerHTML="";
   let i=0;
-  function typeLetter(){
-    if(i<text.length){
-      letter.innerHTML+=text.charAt(i)==="\n"? "<br>": text.charAt(i);
-      i++;
-      setTimeout(typeLetter,25);
-    }
-  }
+  function typeLetter(){ if(i<text.length){letter.innerHTML+=text.charAt(i)==="\n"? "<br>": text.charAt(i); i++; setTimeout(typeLetter,25);} }
   typeLetter();
 
-  // GALLERY
-  const gallery=document.getElementById("gallery");
-  const totalPhotos=20;
-  for(let i=1;i<=totalPhotos;i++){
-    const div=document.createElement("div");
-    div.className="photo";
-    div.innerHTML=`<img src="images/photo${i}.jpg" loading="lazy">`;
-    gallery.appendChild(div);
-  }
-  gallery.innerHTML+=gallery.innerHTML;
-
-  // HERO SLIDESHOW
+  // hero slideshow
   const heroImages=[
     "images/crespo1.jpg","images/crespo2.jpg","images/crespo3.jpg",
     "images/crespo4.jpg","images/crespo5.jpg","images/crespo6.jpg",
@@ -496,54 +416,32 @@ function startApp(){
   const heroImg=document.getElementById("heroImage");
   const heroMsg=document.getElementById("heroMessage");
   let slideIndex=0;
-  function typeHeroMessage(text){
-    heroMsg.innerHTML="";
-    let i=0;
-    function type(){
-      if(i<text.length){
-        heroMsg.innerHTML+=text.charAt(i);
-        i++;
-        setTimeout(type,35);
-      }
-    }
-    type();
-  }
-  function changeSlide(){
-    heroImg.style.opacity=0;
-    setTimeout(()=>{
-      slideIndex=(slideIndex+1)%heroImages.length;
-      heroImg.src=heroImages[slideIndex];
-      typeHeroMessage(heroMessages[slideIndex]);
-      heroImg.style.opacity=1;
-    },600);
-  }
-  typeHeroMessage(heroMessages[0]);
-  setInterval(changeSlide,5000);
 
+  function typeHeroMessage(msg){ heroMsg.innerHTML=""; let j=0; function type(){ if(j<msg.length){heroMsg.innerHTML+=msg.charAt(j); j++; setTimeout(type,35);} } type(); }
+  typeHeroMessage(heroMessages[0]);
+  setInterval(()=>{ heroImg.style.opacity=0; setTimeout(()=>{ slideIndex=(slideIndex+1)%heroImages.length; heroImg.src=heroImages[slideIndex]; typeHeroMessage(heroMessages[slideIndex]); heroImg.style.opacity=1; },600); },5000);
+
+  // gallery auto-scroll
+  const gallery=document.getElementById("gallery");
+  gallery.innerHTML="";
+  for(let k=1;k<=20;k++){ const div=document.createElement("div"); div.className="photo"; div.innerHTML=`<img src="images/photo${k}.jpg" loading="lazy">`; gallery.appendChild(div); }
+  gallery.innerHTML+=gallery.innerHTML;
   let scrollPos=0;
-  function autoScroll(){
-    scrollPos+=0.5;
-    if(scrollPos>=gallery.scrollWidth/2) scrollPos=0;
-    gallery.scrollLeft=scrollPos;
-    requestAnimationFrame(autoScroll);
-  }
-  autoScroll();
+  function autoSlide(){ scrollPos+=0.7; if(scrollPos>=gallery.scrollWidth/2) scrollPos=0; gallery.scrollLeft=scrollPos; requestAnimationFrame(autoSlide);}
+  autoSlide();
 }
 
-document.getElementById("musicBtn").addEventListener("click", startApp);
-
-// MESSAGES LOGIC
-const messagesBtn=document.getElementById("messagesBtn");
+// MESSAGES PAGE
 const messagesPage=document.getElementById("messagesPage");
 const backBtn=document.getElementById("backBtn");
 const messagesList=document.getElementById("messagesList");
 const msgTitle=document.getElementById("msgTitle");
 const msgBody=document.getElementById("msgBody");
 
-const messages=[
+const messages = [
   {
-    title:"A Final System Salute to Our Architect of Innovation",
-    body:`To our University President, Dr. Pablo S. Crespo Jr.,
+    title: "A Final System Salute to Our Architect of Innovation",
+    body: `To our University President, Dr. Pablo S. Crespo Jr.,
 As the sun sets on your final term, we, the CCIS Student Council, speaking on behalf of the entire CCIS Student Body, stand in collective tribute to your transformative leadership.
 
 In the fast-evolving landscape of our university, you served as the Core Processor—the central force that kept our mission running at peak performance. For years, you didn’t just manage our institution; you re-engineered its future. You provided the high-speed bandwidth that allowed our dreams to scale, and you served as the Master Architect who ensured our academic foundations were built on a stable and secure framework.
@@ -557,11 +455,11 @@ With deepest respect and a final standing ovation,
 
 The CCIS Student Council
 Representing the Voice of the CCIS Student Body`,
-    unread:true
+    unread: true
   },
   {
-    title:"Honoring President Crespo",
-    body:`To our esteemed President, Dr. Pablo S. Crespo Jr.,
+    title: "Honoring President Crespo",
+    body: `To our esteemed President, Dr. Pablo S. Crespo Jr.,
 
 True leadership is not measured by the years in office, but by the lives touched and the foundations built. Today, we honor a man whose vision has been the cornerstone of our institution's progress.
 
@@ -579,11 +477,11 @@ Your Heart: For always being a 'President of the People,' listening to the conce
 As you move into this well-deserved retirement, know that your legacy is etched into the very spirit of this school. You leave behind a trail of excellence that will inspire us for generations to come.
 
 Thank you, Sir. Crespo, for a job magnificently done. May your next chapter be as fulfilling and impactful as the one you conclude today.`,
-    unread:true
+    unread: true
   },
   {
-    title:"A bambUhAy Tribute (Poem)",
-    body:`(A Poem for Dr. Pablo S. Crespo Jr.)
+    title: "A bambUhAy Tribute (Poem)",
+    body: `(A Poem for Dr. Pablo S. Crespo Jr.)
 
 The bells of UA ring clear through the air,
 For a leader who guided with wisdom and care.
@@ -607,50 +505,36 @@ Though your term ends and the seasons may sway,
 You’ll always be UA, the kasUbAy way!
 From the mountains to the sea, we raise up a cry:
 "bambUhAy, Dr. Crespo! UA Strong! UA High!"`,
-
-    unread:true
-  },
+    unread: true
+  }
 ];
 
-// OPEN MESSAGES PAGE
 messagesBtn.addEventListener("click", ()=>{
-  document.getElementById("app").style.display="none";
+  app.style.display="none";
   messagesPage.style.display="flex";
-  messagesBtn.style.display = "none"; 
-  topLogos.classList.add('fade'); 
+  messagesBtn.style.display="none";
+  topLogos.classList.add('fade');
   messagesList.innerHTML="";
-  messages.forEach((msg)=>{
+  messages.forEach(msg=>{
     const btn=document.createElement("button");
-    const dot = document.createElement("span");
-    dot.style.display = msg.unread ? "inline-block" : "none";
-    dot.style.width = "10px";
-    dot.style.height = "10px";
-    dot.style.background = "#ef4444";
-    dot.style.borderRadius = "50%";
-    dot.style.marginRight = "10px";
-    dot.style.verticalAlign = "middle";
-    
+    const dot=document.createElement("span");
+    dot.style.display=msg.unread?"inline-block":"none";
+    dot.style.width="10px"; dot.style.height="10px"; dot.style.background="#ef4444"; dot.style.borderRadius="50%"; dot.style.marginRight="10px"; dot.style.verticalAlign="middle";
     btn.appendChild(dot);
     btn.appendChild(document.createTextNode(msg.title));
-
-    btn.addEventListener("click",()=>{
-      msgTitle.innerText = msg.title;
-      msgBody.innerText = msg.body;
-      msg.unread = false;
-      dot.style.display = "none";
+    btn.addEventListener("click", ()=>{
+      msgTitle.innerText=msg.title;
+      msgBody.innerText=msg.body;
+      msg.unread=false; dot.style.display="none";
     });
-
     messagesList.appendChild(btn);
   });
 });
 
-/// BACK TO TRIBUTE PAGE
 backBtn.addEventListener("click", ()=>{
   messagesPage.style.display="none";
-  document.getElementById("app").style.display="flex";
-  messagesBtn.style.display = "block"; 
-  // logos will stay hidden, do NOT remove 'fade' class
-  // topLogos.classList.remove('fade'); <-- removed
+  app.style.display="flex";
+  messagesBtn.style.display="block";
 });
 </script>
 </body>
