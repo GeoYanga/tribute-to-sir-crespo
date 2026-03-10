@@ -98,16 +98,16 @@ button:hover{
   transform: translate(-50%, -50%) scale(1.08);
 }
 
-/* CREDIT */
 #credit{
   position:fixed;
-  top:65%;
+  top:45%; /* above the button */
   left:50%;
   transform:translate(-50%, -50%);
   font-size:16px;
-  opacity:0.7;
+  opacity:0.8;
   font-style:italic;
   text-align:center;
+  z-index:1006;
 }
 
 /* TOP MESSAGES BUTTON */
@@ -315,13 +315,27 @@ button:hover{
     font-size:28px;
     margin-top:80px;
   }
-  /* credit */
-  #credit{
-    top:70%;
-    font-size:14px;
-    padding:0 10px;
-    text-align:center;
+  #credit {
+  position: fixed;
+  top: 30%; /* desktop */
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 16px;
+  opacity: 1;
+  font-style: italic;
+  text-align: center;
+  color: white;
+  z-index: 1006;
+}
+
+@media(max-width:800px){
+  #credit {
+    top: 30%; /* move up on smaller screens */
+    font-size: 14px; /* smaller text on mobile */
+    padding: 0 10px;
   }
+}
+
   /* messages page */
   #messagesContainer{
     flex-direction:column;
@@ -351,13 +365,13 @@ button:hover{
   <p>Please wait...</p>
 </div>
 
-<!-- MUSIC BUTTON -->
-<button id="musicBtn" style="display:none;">▶ Tribute for President</button>
-
 <!-- CREDIT -->
 <div id="credit">
 Built & Deployed by CCIS Student Council | Dedicated to Dr. Pablo S. Crespo Jr.
 </div>
+
+<!-- MUSIC BUTTON -->
+<button id="musicBtn" style="display:none;">▶ Tribute for President</button>
 
 <!-- MAIN APP -->
 <div id="app">
