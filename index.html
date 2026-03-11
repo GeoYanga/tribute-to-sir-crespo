@@ -36,7 +36,7 @@ body{
   pointer-events: none;
 }
 .top-logos img {
-  height: 120px;
+  height: 150px;
   width: auto;
   object-fit: contain;
   border-radius: 8px;
@@ -304,7 +304,7 @@ img{
 </head>
 <body>
 
-<audio id="bgMusic" src="audio/my_tribute_song.mp3" loop></audio>
+<audio id="bgMusic" src="audio/my_tribute_song.mp3" loop preload="auto"></audio>
 
 <!-- TOP LEFT LOGOS -->
 <div class="top-logos">
@@ -388,15 +388,19 @@ const messagesBtn = document.getElementById("messagesBtn");
 const app = document.getElementById("app");
 
 // TRIBUTE BUTTON
-musicBtn.addEventListener("click", ()=>{
-  bgMusic.currentTime=25;
-  bgMusic.play();
-  app.style.display="flex";
+musicBtn.addEventListener("click", () => {
+  bgMusic.currentTime = 25;   // start from the beginning
+  bgMusic.play().catch(() => {
+    console.log("User interaction required to play audio");
+  });
+
+  app.style.display = "flex";
   topLogos.classList.add('fade');
-  credit.style.display="none";
-  musicBtn.style.display="none";
-  messagesBtn.style.display="block";
-  startApp();
+  credit.style.display = "none";
+  musicBtn.style.display = "none";
+  messagesBtn.style.display = "block";
+
+  startApp(); // start slideshow & gallery
 });
 
 // TRIBUTE LOGIC
@@ -410,31 +414,54 @@ function startApp(){
   typeLetter();
 
   // hero slideshow
-  const heroImages=[
-    "images/crespo1.jpg","images/crespo2.jpg","images/crespo3.jpg",
-    "images/crespo4.jpg","images/crespo5.jpg","images/crespo6.jpg",
-    "images/crespo7.jpg","images/crespo8.jpg","images/crespo9.jpg","images/crespo10.jpg"
-  ];
-  const heroMessages=[
-    "President Crespo led the institution with vision and dedication.",
-    "His leadership inspired students and faculty alike.",
-    "Through challenges and progress, he guided the community forward.",
-    "His legacy will remain part of the institution's history.",
-    "He fostered innovation and excellence in every department.",
-    "His guidance empowered teachers to achieve more.",
-    "He promoted student engagement and community service.",
-    "His decisions strengthened the institution's foundation.",
-    "He embraced challenges as opportunities for growth.",
-    "His contributions will be remembered by generations to come."
-  ];
-  const heroImg=document.getElementById("heroImage");
-  const heroMsg=document.getElementById("heroMessage");
-  let slideIndex=0;
+  const heroImages = [
+  "images/crespo1.jpg","images/crespo2.jpg","images/crespo3.jpg",
+  "images/crespo4.jpg","images/crespo5.jpg","images/crespo6.jpg",
+  "images/crespo7.jpg","images/crespo8.jpg","images/crespo9.jpg","images/crespo10.jpg"
+];
 
-  function typeHeroMessage(msg){ heroMsg.innerHTML=""; let j=0; function type(){ if(j<msg.length){heroMsg.innerHTML+=msg.charAt(j); j++; setTimeout(type,35);} } type(); }
-  typeHeroMessage(heroMessages[0]);
-  setInterval(()=>{ heroImg.style.opacity=0; setTimeout(()=>{ slideIndex=(slideIndex+1)%heroImages.length; heroImg.src=heroImages[slideIndex]; typeHeroMessage(heroMessages[slideIndex]); heroImg.style.opacity=1; },600); },5000);
+const heroMessages = [
+  "President Crespo led the institution with vision and dedication.",
+  "His leadership inspired students and faculty alike.",
+  "Through challenges and progress, he guided the community forward.",
+  "His legacy will remain part of the institution's history.",
+  "He fostered innovation and excellence in every department.",
+  "His guidance empowered teachers to achieve more.",
+  "He promoted student engagement and community service.",
+  "His decisions strengthened the institution's foundation.",
+  "He embraced challenges as opportunities for growth.",
+  "His contributions will be remembered by generations to come."
+];
 
+const heroImg = document.getElementById("heroImage");
+const heroMsg = document.getElementById("heroMessage");
+let slideIndex = 0;
+
+// Preload hero images
+heroImages.forEach(src => {
+  const img = new Image();
+  img.src = src;
+  img.decoding = "async";
+});
+
+function showHeroSlide(index) {
+  heroImg.style.opacity = 0; // fast fade
+  setTimeout(() => {
+    heroImg.src = heroImages[index];
+    heroMsg.textContent = heroMessages[index];
+    heroImg.style.opacity = 1;
+  }, 150); // very quick fade
+}
+
+setInterval(() => {
+  slideIndex = (slideIndex + 1) % heroImages.length;
+  showHeroSlide(slideIndex);
+}, 4000); // faster slideshow
+
+// show first slide immediately
+showHeroSlide(slideIndex);
+// Initial slide
+showHeroSlide(slideIndex);
   // gallery auto-scroll
   const gallery=document.getElementById("gallery");
   gallery.innerHTML="";
