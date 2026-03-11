@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tribute to President Sir Crespo</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="images/logo1.png">
+<link rel="preload" as="image" href="images/logo2.png">
+<link rel="preload" as="image" href="images/logo3.png">
+<link rel="preload" as="image" href="images/crespo1.jpg">
 <style>
 body{
   margin:0;
@@ -170,9 +174,9 @@ button:hover{
   height:100%;
   object-fit:cover;
   transition:opacity 1s ease;
+}
 
   
-}
 .hero-text{
   position:absolute;
   bottom:0;
@@ -194,13 +198,16 @@ button:hover{
   flex:0 0 auto;
 }
 .photo img{
-  max-height:240px;
+  width:320px;
+  height:200px;
+  object-fit:cover;
   border-radius:20px;
   padding:8px;
   background:rgba(255,255,255,0.05);
   box-shadow:0 8px 25px rgba(0,0,0,0.4);
   transition:0.4s;
 }
+
 .photo img:hover{
   transform:scale(1.08);
 }
@@ -287,6 +294,11 @@ button:hover{
   #credit{ top:30%; font-size:14px; padding:0 10px; }
   #messagesContainer{ flex-direction:column; height:auto; }
   #messagesList,#messageContent{ width:100%; height:auto; }
+}
+img{
+  max-width:100%;
+  height:auto;
+  display:block;
 }
 </style>
 </head>
@@ -426,8 +438,14 @@ function startApp(){
   // gallery auto-scroll
   const gallery=document.getElementById("gallery");
   gallery.innerHTML="";
-  for(let k=1;k<=20;k++){ const div=document.createElement("div"); div.className="photo"; div.innerHTML=`<img src="images/photo${k}.jpg" loading="lazy">`; gallery.appendChild(div); }
-  gallery.innerHTML+=gallery.innerHTML;
+  for(let k=1;k<=20;k++){
+  const div=document.createElement("div");
+  div.className="photo";
+  div.innerHTML = `<img src="images/photo${k}.jpg" loading="lazy" decoding="async" alt="Memory Photo ${k}">`;
+  gallery.appendChild(div);
+}
+
+gallery.innerHTML += gallery.innerHTML;
   let scrollPos=0;
   function autoSlide(){ scrollPos+=0.7; if(scrollPos>=gallery.scrollWidth/2) scrollPos=0; gallery.scrollLeft=scrollPos; requestAnimationFrame(autoSlide);}
   autoSlide();
